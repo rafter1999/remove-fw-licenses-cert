@@ -4,6 +4,7 @@ Ansible script to run a few commands needed to connect delete and re-fetch firew
 ### REQUIRES
 * ansible (v 2.9.18) (sudo apt-add-respository --yes ppa:ansible/ansible ; sudo apt update ; sudo apt install ansible)
 * palo ansible role (sudo ansible-galaxy collection install paloaltonetworks.panos)
+* ansible-galaxy install PaloAltoNetworks.paloaltonetworks
 * python (tested with version 2.7.17)
 * python pip (tested with version 9.0.1-2.3) 
 * pandevice python package (sudo -H pip install pandevice)
