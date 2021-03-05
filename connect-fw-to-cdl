@@ -1,0 +1,49 @@
+# python (installed with ansible as dep; tested with version 2.7.12)
+# python pip (tested with version 8.1.1 for 2.7) (sudo apt install python-pip)
+# pandevice python package (sudo -H pip install pandevice)
+#
+#
+# STEPS
+# update vars.yml with valid user/password
+# update hosts with list of firewall ip addresses
+# update ansible_python_interpreter below with location of python
+#
+# EXECUTE
+# ansible-playbook -i hosts connect-fw-to-cdl.yml
+#
+---
+- name: RUN A FEW CDL COMMANDS ON FIREWALLS
+  hosts: all
+  connection: local
+  gather_facts: false
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python
+
+
+  roles:
+    - role: PaloAltoNetworks.paloaltonetworks
+
+  tasks:
+
+  - name: get credentials from file
+    include_vars: "vars.yml"
+    no_log: "yes"
+
+  - name: connect to each firewall and run command 'delete license keys'
+    panos_op:
+      provider: "{{ fw }}"
+      cmd: "delete license key *.key"
+    register: panos
+
+  - name: connect to each firewall and run command 'request logging-service-forwarding certificate delete'
+    panos_op:
+      provider: "{{ fw }}"
+      cmd: "request logging-service-forwarding certificate delete"
+    register: panos
+
+  - name: connect to each firewall and run command 'request license fetch'
+    panos_op:
+      provider: "{{ fw }}"
+      cmd: "request license fetch"
+    register: panos
